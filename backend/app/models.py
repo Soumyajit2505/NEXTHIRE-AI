@@ -8,44 +8,135 @@ from app.database import Base
 class User(Base):
     __tablename__ = "users"
 
+    # Primary key for each user
     id = Column(Integer, primary_key=True, index=True)
 
+    # User full name
     full_name = Column(String(100), nullable=False)
 
+    # User email must be unique
     email = Column(String(255), unique=True, index=True, nullable=False)
 
+    # Encrypted password, never store plain password
     hashed_password = Column(String(255), nullable=False)
 
+    # Account creation time
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False
     )
 
-    # Relationship with resumes
-    resumes = relationship("Resume", back_populates="user")
+    # One user can upload many resumes
+    resumes = relationship(
+        "Resume",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    # One user can have many extracted candidate records
+    candidates = relationship(
+        "Candidate",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 
 
 class Resume(Base):
     __tablename__ = "resumes"
 
+    # Primary key for each uploaded resume
     id = Column(Integer, primary_key=True, index=True)
 
+    # Original uploaded file name
     filename = Column(String(255), nullable=False)
 
+    # Local storage path of uploaded file
     file_path = Column(String(500), nullable=False)
 
+    # File type: pdf, docx, etc.
     file_type = Column(String(20), nullable=False)
 
+    # Extracted raw resume text
     extracted_text = Column(Text, nullable=False)
 
-    user_id = Column(Integer, ForeignKey("users.id"))
+    # Resume belongs to one user
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
+    # Resume upload time
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False
     )
 
-    # Relationship with user
-    user = relationship("User", back_populates="resumes")
+    # Relationship with user table
+    user = relationship(
+        "User",
+        back_populates="resumes"
+    )
+
+    # One resume creates one candidate profile
+    candidate = relationship(
+        "Candidate",
+        back_populates="resume",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+
+class Candidate(Base):
+    __tablename__ = "candidates"
+
+    # Primary key for each extracted candidate profile
+    id = Column(Integer, primary_key=True, index=True)
+
+    # Basic candidate details
+    full_name = Column(String(150), nullable=True)
+    email = Column(String(255), nullable=True, index=True)
+    phone = Column(String(30), nullable=True)
+
+    # Extracted resume information
+    skills = Column(Text, nullable=True)
+    education = Column(Text, nullable=True)
+    experience = Column(Text, nullable=True)
+    projects = Column(Text, nullable=True)
+    certifications = Column(Text, nullable=True)
+
+    # Professional profile links
+    linkedin_url = Column(String(500), nullable=True)
+    github_url = Column(String(500), nullable=True)
+
+    # Candidate is created from one resume
+    resume_id = Column(
+        Integer,
+        ForeignKey("resumes.id"),
+        nullable=False,
+        unique=True
+    )
+
+    # Candidate belongs to one user
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    # Candidate profile creation time
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    # Relationship with resume table
+    resume = relationship(
+        "Resume",
+        back_populates="candidate"
+    )
+
+    # Relationship with user table
+    user = relationship(
+        "User",
+        back_populates="candidates"
+    )
