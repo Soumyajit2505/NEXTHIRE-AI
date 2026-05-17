@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -16,6 +18,17 @@ class UserResponse(BaseModel):
     id: int
     full_name: str
     email: EmailStr
+
+    class Config:
+        from_attributes = True
+
+
+# Resume Response Schema
+class ResumeResponse(BaseModel):
+    id: int
+    filename: str
+    file_type: str
+    created_at: datetime
 
     class Config:
         from_attributes = True
