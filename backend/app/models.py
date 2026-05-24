@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -139,4 +139,105 @@ class Candidate(Base):
     user = relationship(
         "User",
         back_populates="candidates"
+    )
+
+    # One candidate can have many ATS results
+    ats_results = relationship(
+        "ATSResult",
+        back_populates="candidate",
+        cascade="all, delete-orphan"
+    )
+
+
+class Job(Base):
+    __tablename__ = "jobs"
+
+    # Primary key for each job description
+    id = Column(Integer, primary_key=True, index=True)
+
+    # Job title
+    # Example: Data Scientist, HR Executive, Civil Engineer
+    title = Column(String(150), nullable=False)
+
+    # Full job description text
+    description = Column(Text, nullable=False)
+
+    # Job domain/category
+    # Example: IT, HR, Finance, Marketing, Civil, Mechanical
+    domain = Column(String(100), nullable=True)
+
+    # Important required skills
+    # Example: Python, SQL OR Recruitment, Communication
+    must_have_skills = Column(Text, nullable=False)
+
+    # Optional or bonus skills
+    preferred_skills = Column(Text, nullable=True)
+
+    # Job creation time
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    # One job can have many ATS results
+    ats_results = relationship(
+        "ATSResult",
+        back_populates="job",
+        cascade="all, delete-orphan"
+    )
+
+
+class ATSResult(Base):
+    __tablename__ = "ats_results"
+
+    # Primary key for each ATS result
+    id = Column(Integer, primary_key=True, index=True)
+
+    # Candidate linked to this ATS result
+    candidate_id = Column(
+        Integer,
+        ForeignKey("candidates.id"),
+        nullable=False
+    )
+
+    # Job linked to this ATS result
+    job_id = Column(
+        Integer,
+        ForeignKey("jobs.id"),
+        nullable=False
+    )
+
+    # Skills matched between candidate and job
+    matched_skills = Column(Text, nullable=True)
+
+    # Important skills missing from candidate profile
+    missing_skills = Column(Text, nullable=True)
+
+    # Final weighted ATS score
+    ats_score = Column(Float, nullable=False)
+
+    # Example: Excellent Match, Strong Match, Good Match
+    match_level = Column(String(50), nullable=False)
+
+    # Human-readable improvement recommendation
+    recommendation = Column(Text, nullable=True)
+
+    # ATS result creation time
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    # Relationship with candidate table
+    candidate = relationship(
+        "Candidate",
+        back_populates="ats_results"
+    )
+
+    # Relationship with job table
+    job = relationship(
+        "Job",
+        back_populates="ats_results"
     )

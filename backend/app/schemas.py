@@ -80,3 +80,76 @@ class CandidateResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# =========================
+# JOB SCHEMAS
+# =========================
+
+class JobCreate(BaseModel):
+    """
+    Request schema for creating a new job description.
+    Works for technical and non-technical roles.
+    """
+
+    # Job title
+    # Example: Data Scientist, HR Manager, Marketing Executive
+    title: str
+
+    # Full job description
+    description: str
+
+    # Optional job domain/category
+    # Example: IT, HR, Finance, Marketing, Civil, Mechanical
+    domain: Optional[str] = None
+
+    # Mandatory required skills
+    # Example: Python, SQL OR Recruitment, Communication
+    must_have_skills: str
+
+    # Optional/bonus skills
+    # Example: Power BI, TensorFlow OR Excel, Negotiation
+    preferred_skills: Optional[str] = None
+
+
+class JobResponse(BaseModel):
+    """
+    Response schema for returning job description data.
+    """
+
+    id: int
+    title: str
+    description: str
+    domain: Optional[str] = None
+    must_have_skills: str
+    preferred_skills: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# =========================
+# ATS RESULT SCHEMAS
+# =========================
+
+class ATSResultResponse(BaseModel):
+    """
+    Response schema for final ATS matching result.
+    """
+
+    id: int
+    candidate_id: int
+    job_id: int
+
+    matched_skills: Optional[str] = None
+    missing_skills: Optional[str] = None
+
+    ats_score: float
+    match_level: str
+    recommendation: Optional[str] = None
+
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
