@@ -92,23 +92,10 @@ class JobCreate(BaseModel):
     Works for technical and non-technical roles.
     """
 
-    # Job title
-    # Example: Data Scientist, HR Manager, Marketing Executive
     title: str
-
-    # Full job description
     description: str
-
-    # Optional job domain/category
-    # Example: IT, HR, Finance, Marketing, Civil, Mechanical
     domain: Optional[str] = None
-
-    # Mandatory required skills
-    # Example: Python, SQL OR Recruitment, Communication
     must_have_skills: str
-
-    # Optional/bonus skills
-    # Example: Power BI, TensorFlow OR Excel, Negotiation
     preferred_skills: Optional[str] = None
 
 
@@ -136,6 +123,7 @@ class JobResponse(BaseModel):
 class ATSResultResponse(BaseModel):
     """
     Response schema for final ATS matching result.
+    Includes skill-based score, semantic score, and hybrid score.
     """
 
     id: int
@@ -145,7 +133,16 @@ class ATSResultResponse(BaseModel):
     matched_skills: Optional[str] = None
     missing_skills: Optional[str] = None
 
+    # Skill-based weighted ATS score
     ats_score: float
+
+    # AI semantic similarity score
+    semantic_score: Optional[float] = None
+
+    # Final combined score
+    # Hybrid Score = 70% ATS Score + 30% Semantic Score
+    hybrid_score: Optional[float] = None
+
     match_level: str
     recommendation: Optional[str] = None
 

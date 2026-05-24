@@ -25,6 +25,9 @@ from app.routes.ats import router as ats_router
 # Phase 5: Candidate ranking routes
 from app.routes.ranking import router as ranking_router
 
+# Phase 6: Semantic AI matching routes
+from app.routes.semantic import router as semantic_router
+
 
 # Create all database tables automatically
 # Existing tables and data will not be deleted
@@ -57,6 +60,7 @@ app.include_router(candidate_router)
 app.include_router(job_router)
 app.include_router(ats_router)
 app.include_router(ranking_router)
+app.include_router(semantic_router)
 
 
 # Health check route
