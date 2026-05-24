@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional
 
-from app.services.skill_extractor import normalize_skill, normalize_skills
+from app.services.skill_extractor import normalize_skill
+from app.services.skill_aliases import normalize_with_alias
 
 
 def calculate_skill_score(
@@ -10,13 +11,6 @@ def calculate_skill_score(
 ) -> float:
     """
     Calculates weighted score for a skill category.
-
-    Example:
-    matched_count = 2
-    total_count = 3
-    weight = 60
-
-    Score = (2 / 3) * 60 = 40
     """
 
     if total_count == 0:
@@ -25,24 +19,73 @@ def calculate_skill_score(
     return round((matched_count / total_count) * weight, 2)
 
 
+def normalize_for_matching(skill: str) -> str:
+    """
+    Normalizes skill for accurate matching.
+    """
+
+    cleaned_skill = normalize_skill(skill)
+    return normalize_with_alias(cleaned_skill)
+
+
+def normalize_skill_list(skills: List[str]) -> List[str]:
+    """
+    Normalizes a list of skills.
+    """
+
+    normalized_skills = []
+
+    for skill in skills:
+        if skill and skill.strip():
+            normalized_skills.append(normalize_for_matching(skill))
+
+    return normalized_skills
+
+
+def is_skill_match(required_skill: str, candidate_skill: str) -> bool:
+    """
+    Checks exact and safe partial skill match.
+
+    Examples:
+    required: python
+    candidate: python programming
+    result: matched
+
+    required: recruitment
+    candidate: recruitment management
+    result: matched
+    """
+
+    required = normalize_for_matching(required_skill)
+    candidate = normalize_for_matching(candidate_skill)
+
+    if required == candidate:
+        return True
+
+    if required in candidate:
+        return True
+
+    if candidate in required:
+        return True
+
+    return False
+
+
 def find_matched_skills(
     candidate_skills: List[str],
     required_skills: List[str]
 ) -> List[str]:
     """
-    Finds skills that are present in both candidate profile and job requirement.
-    Matching is case-insensitive and space-normalized.
+    Finds matched skills between candidate and job.
     """
-
-    normalized_candidate_skills = normalize_skills(candidate_skills)
 
     matched_skills = []
 
-    for skill in required_skills:
-        normalized_skill = normalize_skill(skill)
-
-        if normalized_skill in normalized_candidate_skills:
-            matched_skills.append(skill)
+    for required_skill in required_skills:
+        for candidate_skill in candidate_skills:
+            if is_skill_match(required_skill, candidate_skill):
+                matched_skills.append(required_skill)
+                break
 
     return matched_skills
 
@@ -52,25 +95,28 @@ def find_missing_skills(
     required_skills: List[str]
 ) -> List[str]:
     """
-    Finds job-required skills missing from candidate profile.
+    Finds required skills missing from candidate profile.
     """
-
-    normalized_candidate_skills = normalize_skills(candidate_skills)
 
     missing_skills = []
 
-    for skill in required_skills:
-        normalized_skill = normalize_skill(skill)
+    for required_skill in required_skills:
+        matched = False
 
-        if normalized_skill not in normalized_candidate_skills:
-            missing_skills.append(skill)
+        for candidate_skill in candidate_skills:
+            if is_skill_match(required_skill, candidate_skill):
+                matched = True
+                break
+
+        if not matched:
+            missing_skills.append(required_skill)
 
     return missing_skills
 
 
 def get_match_level(score: float) -> str:
     """
-    Converts ATS score into human-friendly match level.
+    Converts ATS score into match level.
     """
 
     if score >= 85:
@@ -93,7 +139,7 @@ def generate_recommendation(
     missing_skills: List[str]
 ) -> str:
     """
-    Generates recruiter-friendly recommendation based on ATS score.
+    Generates recommendation based on score.
     """
 
     if score >= 85:
@@ -122,21 +168,13 @@ def calculate_ats_score(
     projects_text: Optional[str] = None
 ) -> Dict:
     """
-    Calculates final ATS score using weighted scoring.
+    Calculates final ATS score.
 
-    Final Formula:
+    Formula:
     Must-have Skills       = 60%
     Preferred Skills       = 20%
     Experience Relevance   = 10%
     Project Relevance      = 10%
-
-    Current Phase 4:
-    Experience and project relevance are estimated simply:
-    - If experience text exists, give 10 marks
-    - If project text exists, give 10 marks
-
-    Future Upgrade:
-    Use embeddings or AI similarity for deeper relevance checking.
     """
 
     matched_must_have = find_matched_skills(
@@ -185,19 +223,15 @@ def calculate_ats_score(
     matched_skills = matched_must_have + matched_preferred
     missing_skills = missing_must_have + missing_preferred
 
-    match_level = get_match_level(final_score)
-
-    recommendation = generate_recommendation(
-        score=final_score,
-        missing_skills=missing_skills
-    )
-
     return {
         "ats_score": final_score,
-        "match_level": match_level,
+        "match_level": get_match_level(final_score),
         "matched_skills": matched_skills,
         "missing_skills": missing_skills,
-        "recommendation": recommendation,
+        "recommendation": generate_recommendation(
+            final_score,
+            missing_skills
+        ),
         "breakdown": {
             "must_have_score": must_have_score,
             "preferred_score": preferred_score,

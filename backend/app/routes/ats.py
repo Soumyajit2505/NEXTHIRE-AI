@@ -28,16 +28,25 @@ def generate_ats_result(
     db: Session = Depends(get_db)
 ):
     """
-    Generate weighted ATS score between one candidate and one job.
+    Generate or update weighted ATS score between one candidate and one job.
 
     Formula:
     Must-have Skills     = 60%
     Preferred Skills     = 20%
     Experience Relevance = 10%
     Project Relevance    = 10%
+
+    Important:
+    If the same candidate-job result already exists,
+    this API updates it instead of creating duplicate records.
     """
 
-    candidate = db.query(Candidate).filter(Candidate.id == candidate_id).first()
+    # Fetch candidate by ID
+    candidate = (
+        db.query(Candidate)
+        .filter(Candidate.id == candidate_id)
+        .first()
+    )
 
     if not candidate:
         raise HTTPException(
@@ -45,7 +54,12 @@ def generate_ats_result(
             detail="Candidate not found"
         )
 
-    job = db.query(Job).filter(Job.id == job_id).first()
+    # Fetch job by ID
+    job = (
+        db.query(Job)
+        .filter(Job.id == job_id)
+        .first()
+    )
 
     if not job:
         raise HTTPException(
@@ -53,13 +67,16 @@ def generate_ats_result(
             detail="Job not found"
         )
 
+    # Extract candidate skills from stored candidate profile
     candidate_skills = extract_candidate_skills(candidate.skills)
 
+    # Extract must-have and preferred skills from job record
     job_skills = extract_job_skills(
         must_have_skills=job.must_have_skills,
         preferred_skills=job.preferred_skills
     )
 
+    # Calculate weighted ATS score
     ats_data = calculate_ats_score(
         candidate_skills=candidate_skills,
         must_have_skills=job_skills["must_have"],
@@ -68,11 +85,39 @@ def generate_ats_result(
         projects_text=candidate.projects
     )
 
+    # Convert skill lists into comma-separated strings for database storage
+    matched_skills_text = ", ".join(ats_data["matched_skills"])
+    missing_skills_text = ", ".join(ats_data["missing_skills"])
+
+    # Check if ATS result already exists for same candidate and job
+    existing_ats_result = (
+        db.query(ATSResult)
+        .filter(
+            ATSResult.candidate_id == candidate.id,
+            ATSResult.job_id == job.id
+        )
+        .first()
+    )
+
+    if existing_ats_result:
+        # Update existing result instead of creating duplicate
+        existing_ats_result.matched_skills = matched_skills_text
+        existing_ats_result.missing_skills = missing_skills_text
+        existing_ats_result.ats_score = ats_data["ats_score"]
+        existing_ats_result.match_level = ats_data["match_level"]
+        existing_ats_result.recommendation = ats_data["recommendation"]
+
+        db.commit()
+        db.refresh(existing_ats_result)
+
+        return existing_ats_result
+
+    # Create new ATS result if not already available
     new_ats_result = ATSResult(
         candidate_id=candidate.id,
         job_id=job.id,
-        matched_skills=", ".join(ats_data["matched_skills"]),
-        missing_skills=", ".join(ats_data["missing_skills"]),
+        matched_skills=matched_skills_text,
+        missing_skills=missing_skills_text,
         ats_score=ats_data["ats_score"],
         match_level=ats_data["match_level"],
         recommendation=ats_data["recommendation"]
@@ -92,7 +137,11 @@ def get_all_ats_results(db: Session = Depends(get_db)):
     Latest results appear first.
     """
 
-    return db.query(ATSResult).order_by(ATSResult.id.desc()).all()
+    return (
+        db.query(ATSResult)
+        .order_by(ATSResult.id.desc())
+        .all()
+    )
 
 
 @router.get("/{ats_result_id}", response_model=ATSResultResponse)
