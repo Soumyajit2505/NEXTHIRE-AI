@@ -1,0 +1,82 @@
+[
+    {
+        "candidate_id": 1,
+        "full_name": null,
+        "email": "soumyajitd310@gmail.com",
+        "skills": "Data Analysis, Excel, Git, Keras, Machine Learning, NumPy, Pandas, Power BI, Python, SQL, Scikit-learn, Streamlit, TensorFlow",
+        "experience": null,
+        "projects": null
+    },
+    {
+        "candidate_id": 2,
+        "full_name": null,
+        "email": "soumyajitd310@gmail.com",
+        "skills": "Data Analysis, Data Cleaning, Data Preprocessing, Data Visualization, EDA, Excel, Feature Engineering, Git, Joblib, Keras, Machine Learning, NumPy, Pandas, Plotly, Power BI, Python, SQL, Scikit-learn, Streamlit, TensorFlow",
+        "experience": "Data Scientist Intern March 2026 Pratinik INFOTECH (Remote) Tools Used: Python, Streamlit, Pandas, NumPy, Scikit-learn, Plotly, Joblib, Git \u2013 Worked on real-world datasets by performing data cleaning, preprocessing, and exploratory analysis to identify meaningful patterns and trends. \u2013 Handled imbalanced data scenarios with a focus on improving detection of critical cases and making the solution more practical. \u2013 Evaluated model performance using key metrics and refined predictions through iterative testing and improvements. \u2013 Developed a user-friendly interface for real-time and batch predictions, improving usability and accessibility.",
+        "projects": "Fraud Shield | Python, Streamlit \u2013 Developed an end-to-end fraud detection system by cleaning, preprocessing, and transforming transactional data for machine learning workflows. \u2013 Addressed class imbalance using appropriate strategies, focusing on improving fraud detection recall to minimize missed fraudulent cases. \u2013 Trained and optimized multiple machine learning models through tuning and threshold adjustment to improve prediction performance. \u2013 Built a Streamlit-based application for real-time transaction analysis, enabling users to assess fraud risk effectively. \u2013 Evaluated performance using PR-AUC, ROC-AUC, and confusion matrix analysis to ensure reliability in real-world scenarios. Customer Trends Analysis and Business Insights | Python, SQL, Power BI \u2013 Performed end-to-end analysis of customer transaction data by cleaning, preprocessing, and organizing datasets to maintain consistency. \u2013 Used SQL to analyze customer behavior and identify key trends in purchasing patterns, segmentation, and revenue contribution. \u2013 Developed interactive Power BI dashboards with relevant KPIs to visualize sales performance and customer insights. \u2013 Generated actionable insights on high-value customers and product demand, supporting better business decisions."
+    },
+    {
+        "candidate_id": 3,
+        "full_name": null,
+        "email": "soumyajitd310@gmail.com",
+        "skills": "Data Analysis, Data Cleaning, Data Preprocessing, Data Visualization, EDA, Excel, Feature Engineering, Git, Joblib, Keras, Machine Learning, NumPy, Pandas, Plotly, Power BI, Python, SQL, Scikit-learn, Streamlit, TensorFlow",
+        "experience": "Data Scientist Intern March 2026 Pratinik INFOTECH (Remote) Tools Used: Python, Streamlit, Pandas, NumPy, Scikit-learn, Plotly, Joblib, Git \u2013 Worked on real-world datasets by performing data cleaning, preprocessing, and exploratory analysis to identify meaningful patterns and trends. \u2013 Handled imbalanced data scenarios with a focus on improving detection of critical cases and making the solution more practical. \u2013 Evaluated model performance using key metrics and refined predictions through iterative testing and improvements. \u2013 Developed a user-friendly interface for real-time and batch predictions, improving usability and accessibility.",
+        "projects": "Fraud Shield | Python, Streamlit \u2013 Developed an end-to-end fraud detection system by cleaning, preprocessing, and transforming transactional data for machine learning workflows. \u2013 Addressed class imbalance using appropriate strategies, focusing on improving fraud detection recall to minimize missed fraudulent cases. \u2013 Trained and optimized multiple machine learning models through tuning and threshold adjustment to improve prediction performance. \u2013 Built a Streamlit-based application for real-time transaction analysis, enabling users to assess fraud risk effectively. \u2013 Evaluated performance using PR-AUC, ROC-AUC, and confusion matrix analysis to ensure reliability in real-world scenarios. Customer Trends Analysis and Business Insights | Python, SQL, Power BI \u2013 Performed end-to-end analysis of customer transaction data by cleaning, preprocessing, and organizing datasets to maintain consistency. \u2013 Used SQL to analyze customer behavior and identify key trends in purchasing patterns, segmentation, and revenue contribution. \u2013 Developed interactive Power BI dashboards with relevant KPIs to visualize sales performance and customer insights. \u2013 Generated actionable insights on high-value customers and product demand, supporting better business decisions."
+    },
+    {
+        "candidate_id": 4,
+        "full_name": null,
+        "email": "soumyajitd310@gmail.com",
+        "skills": "Data Analysis, Data Cleaning, Data Preprocessing, Data Visualization, EDA, Excel, Feature Engineering, Git, Joblib, Keras, Machine Learning, NumPy, Pandas, Plotly, Power BI, Python, SQL, Scikit-learn, Streamlit, TensorFlow",
+        "experience": "Data Scientist Intern March 2026 Pratinik INFOTECH (Remote) Tools Used: Python, Streamlit, Pandas, NumPy, Scikit-learn, Plotly, Joblib, Git \u2013 Worked on real-world datasets by performing data cleaning, preprocessing, and exploratory analysis to identify meaningful patterns and trends. \u2013 Handled imbalanced data scenarios with a focus on improving detection of critical cases and making the solution more practical. \u2013 Evaluated model performance using key metrics and refined predictions through iterative testing and improvements. \u2013 Developed a user-friendly interface for real-time and batch predictions, improving usability and accessibility.",
+        "projects": "Fraud Shield | Python, Streamlit \u2013 Developed an end-to-end fraud detection system by cleaning, preprocessing, and transforming transactional data for machine learning workflows. \u2013 Addressed class imbalance using appropriate strategies, focusing on improving fraud detection recall to minimize missed fraudulent cases. \u2013 Trained and optimized multiple machine learning models through tuning and threshold adjustment to improve prediction performance. \u2013 Built a Streamlit-based application for real-time transaction analysis, enabling users to assess fraud risk effectively. \u2013 Evaluated performance using PR-AUC, ROC-AUC, and confusion matrix analysis to ensure reliability in real-world scenarios. Customer Trends Analysis and Business Insights | Python, SQL, Power BI \u2013 Performed end-to-end analysis of customer transaction data by cleaning, preprocessing, and organizing datasets to maintain consistency. \u2013 Used SQL to analyze customer behavior and identify key trends in purchasing patterns, segmentation, and revenue contribution. \u2013 Developed interactive Power BI dashboards with relevant KPIs to visualize sales performance and customer insights. \u2013 Generated actionable insights on high-value customers and product demand, supporting better business decisions."
+    },
+    {
+        "candidate_id": 5,
+        "full_name": null,
+        "email": "soumyajitd310@gmail.com",
+        "skills": "Data Analysis, Excel, Git, Keras, Machine Learning, NumPy, Pandas, Power BI, Python, SQL, Scikit-learn, Streamlit, TensorFlow",
+        "experience": null,
+        "projects": null
+    },
+    {
+        "candidate_id": 6,
+        "full_name": null,
+        "email": "soumyajitd310@gmail.com",
+        "skills": "Data Analysis, Excel, Git, Keras, Machine Learning, NumPy, Pandas, Power BI, Python, SQL, Scikit-learn, Streamlit, TensorFlow",
+        "experience": null,
+        "projects": null
+    },
+    {
+        "candidate_id": 7,
+        "full_name": null,
+        "email": "priya.sharma.hr@example.com",
+        "skills": "CRM, Communication, Excel, HR, Human Resources, Leadership, MS Excel, Marketing, Negotiation, Recruitment, Sales, Team Management",
+        "experience": null,
+        "projects": null
+    },
+    {
+        "candidate_id": 8,
+        "full_name": null,
+        "email": "priya.sharma.hr@example.com",
+        "skills": "CRM, Communication, Excel, HR, Human Resources, Leadership, MS Excel, Marketing, Negotiation, Recruitment, Sales, Team Management",
+        "experience": null,
+        "projects": null
+    },
+    {
+        "candidate_id": 9,
+        "full_name": null,
+        "email": "priya.sharma.hr@example.com",
+        "skills": "CRM, Communication, Excel, HR, Human Resources, Leadership, MS Excel, Marketing, Negotiation, Recruitment, Sales, Team Management",
+        "experience": null,
+        "projects": null
+    },
+    {
+        "candidate_id": 10,
+        "full_name": "Tia Patel",
+        "email": "tiasgnr@gmail.com",
+        "skills": "Data Analysis, Data Analytics, Data Cleaning, Data Mining, Data Preprocessing, Data Visualization, Exploratory Data Analysis, Git, Joblib, Jupyter, Logistic Regression, Machine Learning, Model Evaluation, NLP, NLTK, NumPy, OpenCV, Pandas, Pillow, Python, SQL, Scikit-learn, Statistical Analysis, TF-IDF, VS Code",
+        "experience": "Data scientist Intern March 2026 Navodita Infotech (Remote) Tools Used: Python, Jupyter Notebook, VS Code, Data Mining, Scikit-learn, Pandas \u2013 Developed a Sentiment Analysis system using NLP techniques to classify customer reviews as Positive, Negative, or Neutral. \u2013 Performed data cleaning and preprocessing, including handling missing values, text normalization, and feature selection. \u2013 Evaluated model performance using accuracy, precision, recall, and validate predictive capability. \u2013 Demonstrated ability to derive actionable insights from unstructured data, aligning with real-world data science applications.",
+        "projects": "Sentiment Analysis Pandas, NumPy, Scikit-learn, NLTK, Joblib \u2013 Developed an end-to-end Sentiment Analysis system to classify movie reviews into Positive and Negative using Natural Language Processing techniques. \u2013 Implemented text preprocessing (cleaning, stopword removal, tokenization) and feature extraction using TF-IDF Vectorization to convert text into numerical format. \u2013 Trained a Logistic Regression model for text classification and evaluated performance using accuracy and classification metrics. \u2013 Integrated features like movie-wise review tracking, category classification, prediction history storage (CSV), and autocomplete suggestions for enhanced user experience. Grayscale Image Processing Python, OpenCV, Pillow \u2013 Developed a Python-based image processing application to convert colored images into grayscale using efficient pixel transformation techniques."
+    }
+]

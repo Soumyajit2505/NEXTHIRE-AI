@@ -28,6 +28,9 @@ from app.routes.ranking import router as ranking_router
 # Phase 6: Semantic AI matching routes
 from app.routes.semantic import router as semantic_router
 
+# Phase 7: FAISS semantic candidate search routes
+from app.routes.search import router as search_router
+
 
 # Create all database tables automatically
 # Existing tables and data will not be deleted
@@ -61,6 +64,7 @@ app.include_router(job_router)
 app.include_router(ats_router)
 app.include_router(ranking_router)
 app.include_router(semantic_router)
+app.include_router(search_router)
 
 
 # Health check route
