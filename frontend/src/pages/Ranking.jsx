@@ -143,9 +143,9 @@ const Ranking = () => {
     { icon:'📋', label:'Screening Results', path:'/results' },
     { icon:'⚡', label:'ATS Results',       path:'/ats-results' },
     { icon:'🏆', label:'Rankings',          path:'/ranking', active:true },
-    { icon:'👥', label:'Applicants',        path:'/applicants' },
-    { icon:'📊', label:'Reports',           path:'/reports' },
-    { icon:'⚙️', label:'Settings',         path:'/settings' },
+    { icon:'👥', label:'Applicants',        path:'/dashboard' },
+    { icon:'📊', label:'Reports',           path:'/dashboard' },
+    { icon:'⚙️', label:'Settings',         path:'/dashboard' },
   ];
 
   const filters = [

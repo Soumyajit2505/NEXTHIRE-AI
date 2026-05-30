@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   PieChart, Pie, Cell, ResponsiveContainer,
 } from "recharts";
@@ -96,14 +97,14 @@ const skillAnalysis = [
 const totalSkillsAnalyzed = skillAnalysis.reduce((a, b) => a + b.value, 0);
 
 const navItems = [
-  { name: "Dashboard", icon: FiGrid },
-  { name: "Upload Resumes", icon: FiUploadCloud },
-  { name: "Screening Results", icon: FiCheckSquare },
-  { name: "ATS Results", icon: FiTarget },
-  { name: "Rankings", icon: FiBarChart2 },
-  { name: "Applicants", icon: FiUsers },
-  { name: "Reports", icon: FiFileText },
-  { name: "Settings", icon: FiSettings },
+  { name: "Dashboard", icon: FiGrid, path: "/dashboard" },
+  { name: "Upload Resumes", icon: FiUploadCloud, path: "/upload" },
+  { name: "Screening Results", icon: FiCheckSquare, path: "/results" },
+  { name: "ATS Results", icon: FiTarget, path: "/ats-results" },
+  { name: "Rankings", icon: FiBarChart2, path: "/ranking" },
+  { name: "Applicants", icon: FiUsers, path: "/dashboard" },
+  { name: "Reports", icon: FiFileText, path: "/dashboard" },
+  { name: "Settings", icon: FiSettings, path: "/dashboard" },
 ];
 
 const SIDEBAR_W = 252;
@@ -341,7 +342,7 @@ function NeuralBackground() {
 }
 
 /* ============================ SIDEBAR ============================ */
-function SidebarBody({ active, setActive, onNavigate }) {
+function SidebarBody({ active, setActive, onNavigate, navigate }) {
   return (
     <>
       <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "4px 8px 18px" }}>
@@ -378,7 +379,7 @@ function SidebarBody({ active, setActive, onNavigate }) {
           const Icon = it.icon;
           return (
             <button key={it.name}
-              onClick={() => { setActive(it.name); onNavigate && onNavigate(); }}
+              onClick={() => { setActive(it.name); navigate(it.path); if (onNavigate) onNavigate(); }}
               className={`nh-navlink ${on ? "nh-active" : ""}`}
               style={{
                 display: "flex", alignItems: "center", gap: 12,
@@ -436,7 +437,7 @@ function Sidebar({ active, setActive, onClose }) {
   );
 }
 
-function DesktopSidebarSlot({ active, setActive }) {
+function DesktopSidebarSlot({ active, setActive, navigate }) {
   return (
     <>
       <style>{`
@@ -466,7 +467,7 @@ function DesktopSidebarSlot({ active, setActive }) {
         }} />
         <div style={{ position: "relative", zIndex: 1, display: "flex",
           flexDirection: "column", flex: 1 }}>
-          <SidebarBody active={active} setActive={setActive} />
+          <SidebarBody active={active} setActive={setActive} navigate={navigate} />
         </div>
       </aside>
     </>
@@ -1049,6 +1050,7 @@ function MetadataRow() {
 
 /* ============================ ATS RESULTS PAGE ============================ */
 export default function ATSResults() {
+  const navigate = useNavigate();
   const [active, setActive] = useState("ATS Results");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -1062,7 +1064,7 @@ export default function ATSResults() {
         display: "flex", width: "100%", height: "100%",
       }}>
         <div className="nh-desktop-sidebar" style={{ flexShrink: 0 }}>
-          <DesktopSidebarSlot active={active} setActive={setActive} />
+          <DesktopSidebarSlot active={active} setActive={setActive} navigate={navigate} />
         </div>
 
         {sidebarOpen && (
@@ -1072,7 +1074,7 @@ export default function ATSResults() {
                 position: "fixed", inset: 0, zIndex: 35,
                 background: "rgba(0,0,0,.55)", backdropFilter: "blur(2px)",
               }} />
-            <Sidebar active={active} setActive={setActive}
+            <Sidebar active={active} setActive={setActive} navigate={navigate}
               onClose={() => setSidebarOpen(false)} />
           </>
         )}
@@ -1116,7 +1118,7 @@ export default function ATSResults() {
                   fontSize: 12.5, fontWeight: 700, color: "#03070D",
                   background: "linear-gradient(100deg,#00D9FF,#B8FF5A)",
                   boxShadow: "0 8px 22px rgba(0,217,255,.24)",
-                }}>
+                }} onClick={() => navigate("/ranking")}>
                   <span className="nh-shine" />
                   <span style={{ position: "relative", display: "flex",
                     alignItems: "center", gap: 9 }}>

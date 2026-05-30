@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FiGrid, FiUploadCloud, FiCheckSquare, FiTarget, FiBarChart2,
   FiUsers, FiFileText, FiSettings, FiSearch, FiBell, FiMoon,
@@ -8,14 +9,14 @@ import logo from "../assets/images/logo.png";
 
 /* ============================ DATA ============================ */
 const navItems = [
-  { name: "Dashboard", icon: FiGrid },
-  { name: "Upload Resumes", icon: FiUploadCloud },
-  { name: "Screening Results", icon: FiCheckSquare },
-  { name: "ATS Results", icon: FiTarget },
-  { name: "Rankings", icon: FiBarChart2 },
-  { name: "Applicants", icon: FiUsers },
-  { name: "Reports", icon: FiFileText },
-  { name: "Settings", icon: FiSettings },
+  { name: "Dashboard", icon: FiGrid, path: "/dashboard" },
+  { name: "Upload Resumes", icon: FiUploadCloud, path: "/upload" },
+  { name: "Screening Results", icon: FiCheckSquare, path: "/results" },
+  { name: "ATS Results", icon: FiTarget, path: "/ats-results" },
+  { name: "Rankings", icon: FiBarChart2, path: "/ranking" },
+  { name: "Applicants", icon: FiUsers, path: "/dashboard" },
+  { name: "Reports", icon: FiFileText, path: "/dashboard" },
+  { name: "Settings", icon: FiSettings, path: "/dashboard" },
 ];
 
 const pipeline = [
@@ -269,7 +270,7 @@ function NeuralBackground() {
 }
 
 /* ============================ SIDEBAR ============================ */
-function SidebarBody({ active, setActive, onNavigate }) {
+function SidebarBody({ active, setActive, onNavigate, navigate }) {
   return (
     <>
       <div style={{ display: "flex", alignItems: "center", gap: 13, padding: "4px 8px 20px" }}>
@@ -306,7 +307,7 @@ function SidebarBody({ active, setActive, onNavigate }) {
           const Icon = it.icon;
           return (
             <button key={it.name}
-              onClick={() => { setActive(it.name); onNavigate && onNavigate(); }}
+              onClick={() => { setActive(it.name); navigate(it.path); if (onNavigate) onNavigate(); }}
               className={`nh-navlink ${on ? "nh-active" : ""}`}
               style={{
                 display: "flex", alignItems: "center", gap: 12,
@@ -326,7 +327,7 @@ function SidebarBody({ active, setActive, onNavigate }) {
   );
 }
 
-function Sidebar({ active, setActive, onClose }) {
+function Sidebar({ active, setActive, navigate, onClose }) {
   return (
     <aside className="nh-glass nh-scroll" style={{
       width: SIDEBAR_W, flexShrink: 0, height: "100vh",
@@ -335,12 +336,12 @@ function Sidebar({ active, setActive, onClose }) {
       padding: "22px 16px", overflowY: "auto",
       zIndex: 40, position: "fixed", left: 0, top: 0,
     }}>
-      <SidebarBody active={active} setActive={setActive} onNavigate={onClose} />
+      <SidebarBody active={active} setActive={setActive} navigate={navigate} onNavigate={onClose} />
     </aside>
   );
 }
 
-function DesktopSidebarSlot({ active, setActive }) {
+function DesktopSidebarSlot({ active, setActive, navigate }) {
   return (
     <>
       <style>{`
@@ -362,7 +363,7 @@ function DesktopSidebarSlot({ active, setActive }) {
         }} />
         <div style={{ position: "relative", zIndex: 1, display: "flex",
           flexDirection: "column", flex: 1 }}>
-          <SidebarBody active={active} setActive={setActive} />
+          <SidebarBody active={active} setActive={setActive} navigate={navigate} />
         </div>
       </aside>
     </>
@@ -844,6 +845,7 @@ function RecentUploads() {
 
 /* ============================ UPLOAD PAGE ============================ */
 export default function Upload() {
+  const navigate = useNavigate();
   const [active, setActive] = useState("Upload Resumes");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -857,7 +859,7 @@ export default function Upload() {
         display: "flex", width: "100%", height: "100%",
       }}>
         <div className="nh-desktop-sidebar" style={{ flexShrink: 0 }}>
-          <DesktopSidebarSlot active={active} setActive={setActive} />
+          <DesktopSidebarSlot active={active} setActive={setActive} navigate={navigate} />
         </div>
 
         {sidebarOpen && (
@@ -867,7 +869,7 @@ export default function Upload() {
                 position: "fixed", inset: 0, zIndex: 35,
                 background: "rgba(0,0,0,.55)", backdropFilter: "blur(2px)",
               }} />
-            <Sidebar active={active} setActive={setActive}
+            <Sidebar active={active} setActive={setActive} navigate={navigate}
               onClose={() => setSidebarOpen(false)} />
           </>
         )}
@@ -918,6 +920,42 @@ export default function Upload() {
 
             {/* Recent uploads */}
             <RecentUploads />
+
+            {/* Workflow button to proceed to Results */}
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 28 }}>
+              <button className="nh-btn-ghost" style={{
+                padding: "12px 26px", borderRadius: 13, border: "1px solid rgba(255,255,255,.12)",
+                background: "transparent", color: "#8FA3B8", fontSize: 14, fontWeight: 600,
+                cursor: "pointer", fontFamily: "inherit",
+              }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(0,217,255,.06)";
+                  e.currentTarget.style.borderColor = "rgba(0,217,255,.3)";
+                  e.currentTarget.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,.12)";
+                  e.currentTarget.style.color = "#8FA3B8";
+                }}>Back</button>
+              <button className="nh-btn-primary" style={{
+                padding: "12px 26px", borderRadius: 13, border: "none",
+                background: "linear-gradient(100deg,#00D9FF,#B8FF5A)", color: "#03070D",
+                fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
+                boxShadow: "0 8px 22px rgba(0,217,255,.24)", overflow: "hidden", position: "relative",
+              }}
+                onClick={() => navigate("/results")}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 14px 30px rgba(0,217,255,.32), 0 0 26px rgba(184,255,90,.22)";
+                }}  
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 8px 22px rgba(0,217,255,.24)";
+                }}>
+                <span style={{ position: "relative" }}>Proceed to Results</span>
+              </button>
+            </div>
           </main>
         </div>
       </div>

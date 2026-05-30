@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area, PieChart, Pie, Cell,
@@ -14,14 +15,14 @@ import logo from "../assets/images/logo.png";
 
 /* ============================ DATA ============================ */
 const navItems = [
-  { name: "Dashboard", icon: FiGrid },
-  { name: "Upload Resumes", icon: FiUploadCloud },
-  { name: "Screening Results", icon: FiCheckSquare },
-  { name: "ATS Results", icon: FiTarget },
-  { name: "Rankings", icon: FiBarChart2 },
-  { name: "Applicants", icon: FiUsers },
-  { name: "Reports", icon: FiFileText },
-  { name: "Settings", icon: FiSettings },
+  { name: "Dashboard", icon: FiGrid, path: "/dashboard" },
+  { name: "Upload Resumes", icon: FiUploadCloud, path: "/upload" },
+  { name: "Screening Results", icon: FiCheckSquare, path: "/results" },
+  { name: "ATS Results", icon: FiTarget, path: "/ats-results" },
+  { name: "Rankings", icon: FiBarChart2, path: "/ranking" },
+  { name: "Applicants", icon: FiUsers, path: "/results" },
+  { name: "Reports", icon: FiFileText, path: "/ranking" },
+  { name: "Settings", icon: FiSettings, path: "/dashboard" },
 ];
 
 const spark = (seed) =>
@@ -278,7 +279,7 @@ function NeuralBackground() {
 }
 
 /* ============================ SIDEBAR (shared body) ============================ */
-function SidebarBody({ active, setActive, onNavigate }) {
+function SidebarBody({ active, setActive, navigate, onNavigate }) {
   return (
     <>
       {/* Brand / Logo section */}
@@ -322,7 +323,7 @@ function SidebarBody({ active, setActive, onNavigate }) {
           const Icon = it.icon;
           return (
             <button key={it.name}
-              onClick={() => { setActive(it.name); onNavigate && onNavigate(); }}
+              onClick={() => { setActive(it.name); navigate(it.path); if (onNavigate) onNavigate(); }}
               className={`nh-navlink ${on ? "nh-active" : ""}`}
               style={{
                 display: "flex", alignItems: "center", gap: 12,
@@ -344,7 +345,7 @@ function SidebarBody({ active, setActive, onNavigate }) {
 }
 
 /* Floating drawer sidebar (tablet / mobile) */
-function Sidebar({ active, setActive, onClose }) {
+function Sidebar({ active, setActive, navigate, onClose }) {
   return (
     <aside className="nh-glass nh-scroll" style={{
       width: SIDEBAR_W, flexShrink: 0, height: "100vh",
@@ -353,13 +354,13 @@ function Sidebar({ active, setActive, onClose }) {
       padding: "24px 16px", overflowY: "auto",
       zIndex: 40, position: "fixed", left: 0, top: 0,
     }}>
-      <SidebarBody active={active} setActive={setActive} onNavigate={onClose} />
+      <SidebarBody active={active} setActive={setActive} navigate={navigate} onNavigate={onClose} />
     </aside>
   );
 }
 
 /* Desktop sidebar: always visible >=1025px, hidden on tablet/mobile. */
-function DesktopSidebarSlot({ active, setActive }) {
+function DesktopSidebarSlot({ active, setActive, navigate }) {
   return (
     <>
       <style>{`
@@ -383,7 +384,7 @@ function DesktopSidebarSlot({ active, setActive }) {
         }} />
         <div style={{ position: "relative", zIndex: 1, display: "flex",
           flexDirection: "column", flex: 1 }}>
-          <SidebarBody active={active} setActive={setActive} />
+          <SidebarBody active={active} setActive={setActive} navigate={navigate} />
         </div>
       </aside>
     </>
@@ -607,6 +608,7 @@ function ActivityCard({ a }) {
 
 /* ============================ DASHBOARD ============================ */
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [active, setActive] = useState("Dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -622,7 +624,7 @@ export default function Dashboard() {
       }}>
         {/* Static sidebar slot (desktop). On tablet/mobile it floats. */}
         <div className="nh-desktop-sidebar" style={{ flexShrink: 0 }}>
-          <DesktopSidebarSlot active={active} setActive={setActive} />
+          <DesktopSidebarSlot active={active} setActive={setActive} navigate={navigate} />
         </div>
 
         {/* Mobile / tablet drawer */}
@@ -633,7 +635,7 @@ export default function Dashboard() {
                 position: "fixed", inset: 0, zIndex: 35,
                 background: "rgba(0,0,0,.55)", backdropFilter: "blur(2px)",
               }} />
-            <Sidebar active={active} setActive={setActive}
+            <Sidebar active={active} setActive={setActive} navigate={navigate}
               onClose={() => setSidebarOpen(false)} />
           </>
         )}
@@ -814,13 +816,21 @@ export default function Dashboard() {
                   display: "grid", gap: 14,
                   gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))",
                 }}>
-                  {quickActions.map((q) => (
+                  {quickActions.map((q) => {
+                    const navigationMap = {
+                      "Upload Resumes": "/upload",
+                      "Screen Resumes": "/results",
+                      "View Rankings": "/ranking",
+                      "Generate Report": "/dashboard",
+                    };
+                    return (
                     <button key={q.title} className="nh-card" style={{
                       display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
                       padding: "22px 12px", borderRadius: 16, cursor: "pointer",
                       background: `linear-gradient(160deg,${q.color}14,rgba(7,17,27,.6))`,
                       border: `1px solid ${q.color}30`, color: "#E8EEF5",
                     }}
+                      onClick={() => navigate(navigationMap[q.title] || "/dashboard")}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.borderColor = `${q.color}88`;
                         e.currentTarget.style.boxShadow = `0 16px 34px rgba(0,0,0,.42),0 0 24px ${q.color}33`;
@@ -841,7 +851,8 @@ export default function Dashboard() {
                       <div style={{ fontSize: 13, fontWeight: 600 }}>{q.title}</div>
                       <div style={{ fontSize: 11, color: "#7C92A8" }}>{q.sub}</div>
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
               </ChartCard>
             </div>
